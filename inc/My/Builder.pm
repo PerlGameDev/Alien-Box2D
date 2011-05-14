@@ -141,8 +141,8 @@ sub set_config_data {
     # defaults (used on MS Windows build)
     version     => $self->notes('build_box2d_version'),
     prefix      => '@PrEfIx@',
-    libs        => '-L' . $self->get_path('@PrEfIx@/lib') . ' -lode',
-    cflags      => '-I' . $self->get_path('@PrEfIx@/include') . ( ($pr eq 'double') ? ' -DdDOUBLE' : ' -DdSINGLE'),
+    libs        => '-L' . $self->get_path('@PrEfIx@/lib') . ' -lBox2D',
+    cflags      => '-I' . $self->get_path('@PrEfIx@/include'),
     shared_libs => [ ],
   };
 
