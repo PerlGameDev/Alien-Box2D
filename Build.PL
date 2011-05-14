@@ -16,8 +16,8 @@ eval "require $package" or die "Require '$package' failed: $@\n";
 
 #### Stadard Module::Builder stuff
 my $build = $package->new(
-  module_name          => 'Alien::ODE',
-  all_from             => 'lib/Alien/ODE.pm',
+  module_name          => 'Alien::Box2D',
+  all_from             => 'lib/Alien/Box2D.pm',
   dist_author	       => 'KMX <kmx@cpan.org>',
   license              => 'perl',
   requires             => {
@@ -48,13 +48,13 @@ my $build = $package->new(
   },
   meta_merge => {
     resources  => {
-      bugtracker => 'http://rt.cpan.org/NoAuth/Bugs.html?Dist=Alien-ODE',
-      repository => 'http://github.com/PerlGameDev/Alien-ODE'
+      bugtracker => 'http://rt.cpan.org/NoAuth/Bugs.html?Dist=Alien-Box2D',
+      repository => 'http://github.com/PerlGameDev/Alien-Box2D'
     }
   },
   create_readme => 1,
   share_dir => 'sharedir',
-  # sharedir is used for storing compiled/prebuilt binaries of ODE lib
+  # sharedir is used for storing compiled/prebuilt binaries of Box2D lib
   # avoid using 'share' name as M::B doe not handle well paths like /xx/yy/share/zz/ww/share/xx
 );
 $build->create_build_script();
@@ -62,7 +62,7 @@ $build->create_build_script();
 #### clean build_done stamp; force rebuild when running 'Build'
 $build->clean_build_done_marker;
 
-print "\nWelcome to Alien::ODE module installation";
+print "\nWelcome to Alien::Box2D module installation";
 print "\n-----------------------------------------\n\n";
 
 #### check what options we have for our platform

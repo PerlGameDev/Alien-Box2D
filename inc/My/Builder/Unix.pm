@@ -14,7 +14,7 @@ sub build_binaries {
   print "BUILDING '" . $bp->{dirname} . "'...\n";
   my $srcdir = catfile($build_src, $bp->{dirname});
   my $prefixdir = rel2abs($build_out);
-  $self->config_data('build_prefix', $prefixdir); # save it for future Alien::ODE::ConfigData
+  $self->config_data('build_prefix', $prefixdir); # save it for future Alien::Box2D::ConfigData
 
   chdir $srcdir;
 

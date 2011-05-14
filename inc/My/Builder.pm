@@ -5,7 +5,7 @@ use warnings;
 use base 'Module::Build';
 
 use lib "inc";
-use My::Utility qw(find_ODE_dir find_file sed_inplace);
+use My::Utility qw(find_Box2D_dir find_file sed_inplace);
 use File::Spec::Functions qw(catdir catfile splitpath catpath rel2abs abs2rel);
 use File::Path qw(make_path remove_tree);
 use File::Copy qw(cp);
@@ -38,13 +38,13 @@ sub ACTION_code {
     my $patches      = 'patches';
     # we are deriving the subdir name from $bp->{title} as we want to
     # prevent troubles when user reinstalls the same version of
-    # Alien::ODE with different build options
+    # Alien::Box2D with different build options
     my $share_subdir = $self->{properties}->{dist_version} . '_' . substr(sha1_hex($bp->{title}), 0, 8);
     my $build_out    = catfile('sharedir', $share_subdir);
     my $build_src    = 'build_src';
     $self->add_to_cleanup($build_src, $build_out);
 
-    # save some data into future Alien::ODE::ConfigData
+    # save some data into future Alien::Box2D::ConfigData
     $self->config_data('build_prefix', $build_out);
     $self->config_data('build_params', $bp);
     $self->config_data('build_cc', $Config{cc});
@@ -130,16 +130,16 @@ sub extract_sources {
 sub set_config_data {
   my( $self, $build_out ) = @_;
 
-  # try to find ODE root dir
-  my ($prefix, $incdir, $libdir) = find_ODE_dir(rel2abs($build_out));
-  die "###ERROR### Cannot find ODE directory in 'sharedir'" unless $prefix;
+  # try to find Box2D root dir
+  my ($prefix, $incdir, $libdir) = find_Box2D_dir(rel2abs($build_out));
+  die "###ERROR### Cannot find Box2D directory in 'sharedir'" unless $prefix;
   $self->config_data('share_subdir', abs2rel($prefix, rel2abs('sharedir')));
 
   # set defaults
   my $pr = $self->notes('build_params')->{precision};
   my $cfg = {
     # defaults (used on MS Windows build)
-    version     => $self->notes('build_ode_version'),
+    version     => $self->notes('build_box2d_version'),
     prefix      => '@PrEfIx@',
     libs        => '-L' . $self->get_path('@PrEfIx@/lib') . ' -lode',
     cflags      => '-I' . $self->get_path('@PrEfIx@/include') . ( ($pr eq 'double') ? ' -DdDOUBLE' : ' -DdSINGLE'),
@@ -166,7 +166,7 @@ sub set_config_data {
 sub build_binaries {
   # this needs to be overriden in My::Builder::<platform>
   my ($self, $build_out, $build_src) = @_;
-  die "###ERROR### My::Builder cannot build ODE from sources, use rather My::Builder::<platform>";
+  die "###ERROR### My::Builder cannot build Box2D from sources, use rather My::Builder::<platform>";
 }
 
 sub get_path {

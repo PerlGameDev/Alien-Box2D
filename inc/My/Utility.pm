@@ -3,7 +3,7 @@ use strict;
 use warnings;
 use base qw(Exporter);
 
-our @EXPORT_OK = qw(check_config_script check_prebuilt_binaries check_src_build find_ODE_dir find_file sed_inplace);
+our @EXPORT_OK = qw(check_config_script check_prebuilt_binaries check_src_build find_Box2D_dir find_file sed_inplace);
 use Config;
 use File::Spec::Functions qw(splitdir catdir splitpath catpath rel2abs);
 use File::Find qw(find);
@@ -70,7 +70,7 @@ sub find_file {
   return @files;
 }
 
-sub find_ODE_dir {
+sub find_Box2D_dir {
   my $root = shift;
   my ($prefix, $incdir, $libdir);
   return unless $root;
