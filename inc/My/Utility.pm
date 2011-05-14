@@ -15,20 +15,12 @@ my $source_packs = [
   {
     title   => "Source code build: ODE 0.11.1, single precision (RECOMMENDED)",
     precision => 'single',
-    dirname => 'ode-0.11.1',
-    url => 'http://downloads.sourceforge.net/opende/ode-0.11.1.tar.gz',
-    sha1sum  => 'dcbfeec0091d16a9374a32cdac3758f4eee609f1',
+    dirname => 'Box2D_v2.1.2',
+    url => 'http://box2d.googlecode.com/files/Box2D_v2.1.2.zip',
+    sha1sum  => 'b1f09f38fc130ae6c17e1767747a3a82bf8e517f',
     patches => [ ],
   },
 ## you can add another src build set
-  {
-    title   => "Source code build: ODE 0.11.1, double precision",
-    precision => 'double',
-    dirname => 'ode-0.11.1',
-    url => 'http://downloads.sourceforge.net/opende/ode-0.11.1.tar.gz',
-    sha1sum  => 'dcbfeec0091d16a9374a32cdac3758f4eee609f1',
-    patches => [ ],
-  },
 ];
 
 sub check_config_script
