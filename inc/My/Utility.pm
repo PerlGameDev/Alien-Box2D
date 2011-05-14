@@ -13,9 +13,9 @@ use Cwd qw(realpath);
 my $source_packs = [
 ## the first set for source code build will be a default option
   {
-    title   => "Source code build: ODE 0.11.1, single precision (RECOMMENDED)",
+    title   => "Source code build: Box2D 2.1.2 (RECOMMENDED)",
     precision => 'single',
-    dirname => 'Box2D_v2.1.2',
+    dirname => 'Box2D_v2.1.2/Box2D/Box2D',
     url => 'http://box2d.googlecode.com/files/Box2D_v2.1.2.zip',
     sha1sum  => 'b1f09f38fc130ae6c17e1767747a3a82bf8e517f',
     patches => [ ],

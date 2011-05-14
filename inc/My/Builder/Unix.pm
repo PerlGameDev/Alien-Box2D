@@ -17,16 +17,14 @@ sub build_binaries {
   $self->config_data('build_prefix', $prefixdir); # save it for future Alien::Box2D::ConfigData
 
   chdir $srcdir;
+  
+  print "$srcdir\n";
 
-  # do './configure ...'
-  my $run_configure = 'y';
-  $run_configure = $self->prompt("Run ./configure again?", "n") if (-f "config.status");
-  if (lc($run_configure) eq 'y') {
-    my $cmd = $self->get_configure_cmd($prefixdir);
-    print "Configuring ...\n";
-    print "(cmd: $cmd)\n";
-    $self->do_system($cmd) or die "###ERROR### [$?] during ./configure ... ";
-  }
+  # do 'cmake ...'
+  my $cmd = $self->get_cmake_cmd($prefixdir);
+  print "CMaking ...\n";
+  print "(cmd: $cmd)\n";
+  $self->do_system($cmd);# or die "###ERROR### [$?] during cmake ... ";
 
   # do 'make install'
   my @cmd = ($self->get_make, 'install');
@@ -38,17 +36,11 @@ sub build_binaries {
   return 1;
 }
 
-sub get_configure_cmd {
+sub get_cmake_cmd {
   my ($self, $prefixdir) = @_;
-##  my $extra_cflags = "-I$prefixdir/include";
-##  my $extra_ldflags = "-L$prefixdir/lib";
-  my $extra = ($self->notes('build_params')->{precision} eq 'double') ? '--enable-double-precision' : '';
 
-  # prepare configure command
-  my $cmd = "./configure --prefix=$prefixdir --enable-static=yes --enable-shared=no $extra" .
-         " --disable-demos --disable-dependency-tracking";
-##	 .
-##         " CFLAGS=\"$extra_cflags\" LDFLAGS=\"$extra_ldflags\"";
+  my $cmd = sprintf('cmake -DCMAKE_INSTALL_PREFIX="%s" -DBOX2D_INSTALL=ON -DBOX2D_BUILD_SHARED=ON ..',
+    $self->config_data('build_prefix'));
 
   return $cmd;
 }
