@@ -67,15 +67,15 @@ sub find_Box2D_dir {
   my ($prefix, $incdir, $libdir);
   return unless $root;
 
-  # try to find ode.h
-  my ($found) = find_file($root, qr/ode\.h$/i ); # take just the first one
+  # try to find Box2D.h
+  my ($found) = find_file($root, qr/Box2D\.h$/i ); # take just the first one
   return unless $found;
   
   # get prefix dir
   my ($v, $d, $f) = splitpath($found);
   my @pp = reverse splitdir($d);
   shift(@pp) if(defined($pp[0]) && $pp[0] eq '');
-  shift(@pp) if(defined($pp[0]) && $pp[0] eq 'ode');
+  shift(@pp) if(defined($pp[0]) && $pp[0] eq 'Box2D');
   if(defined($pp[0]) && $pp[0] eq 'include') {
     shift(@pp);
     @pp = reverse @pp;
