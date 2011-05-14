@@ -98,12 +98,12 @@ LICENSE file included with this module.
 sub config
 {
   my ($package, $param) = @_;
-  return _ode_config_via_script($param) if(Alien::Box2D::ConfigData->config('script'));
-  return _ode_config_via_config_data($param) if(Alien::Box2D::ConfigData->config('config'));
+  return _box2d_config_via_script($param) if(Alien::Box2D::ConfigData->config('script'));
+  return _box2d_config_via_config_data($param) if(Alien::Box2D::ConfigData->config('config'));
 }
 
 ### internal functions
-sub _ode_config_via_script
+sub _box2d_config_via_script
 {
   my ($param) = @_;
   my $devnull = File::Spec->devnull();
@@ -114,7 +114,7 @@ sub _ode_config_via_script
   return $val;
 }
 
-sub _ode_config_via_config_data
+sub _box2d_config_via_config_data
 {
   my ($param) = @_;
   my $share_dir = dist_dir('Alien-Box2D');

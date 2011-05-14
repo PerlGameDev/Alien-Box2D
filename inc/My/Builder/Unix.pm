@@ -16,10 +16,18 @@ sub build_binaries {
   my $prefixdir = rel2abs($build_out);
   $self->config_data('build_prefix', $prefixdir); # save it for future Alien::Box2D::ConfigData
 
+  print "Gonna read version info from $srcdir/Common/b2Settings.cpp\n";
+  open(DAT, "$srcdir/Common/b2Settings.cpp") || die;
+  my @raw=<DAT>;
+  close(DAT);
+  my ($version) = grep(/version\s?=\s?\{[\d\s,]+\}/, @raw);
+  if ($version =~ /version\s?=\s?\{(\d+)[^\d]+(\d+)[^\d]+(\d+)\}/) {
+    print STDERR "Got version=$1.$2.$3\n";
+    $self->notes('build_box2d_version', "$1.$2.$3");
+  }
+
   chdir $srcdir;
   
-  print "$srcdir\n";
-
   # do 'cmake ...'
   my $cmd = $self->get_cmake_cmd($prefixdir);
   print "CMaking ...\n";

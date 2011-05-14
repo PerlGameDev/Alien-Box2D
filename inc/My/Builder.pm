@@ -136,7 +136,6 @@ sub set_config_data {
   $self->config_data('share_subdir', abs2rel($prefix, rel2abs('sharedir')));
 
   # set defaults
-  my $pr = $self->notes('build_params')->{precision};
   my $cfg = {
     # defaults (used on MS Windows build)
     version     => $self->notes('build_box2d_version'),
