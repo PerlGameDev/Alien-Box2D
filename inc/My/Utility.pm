@@ -10,11 +10,24 @@ use File::Find qw(find);
 use File::Copy qw(cp);
 use Cwd qw(realpath);
 
+our $cc = $Config{cc};
+
+my $prebuilt_binaries = [
+    {
+      title    => "Binaries Win/32bit Box2D-2.1.2",
+      url      => 'http://froggs.de/libbox2d/Win32_Box2D-2.1.2_20110515.zip',
+      version  => '2.1.2',
+      sha1sum  => 'cf33d16415dacb39bb25f03d456e2ef006641944',
+      arch_re  => qr/^MSWin32-x86-multi-thread$/,
+      os_re    => qr/^MSWin32$/,
+      cc_re    => qr/cc/,
+    },
+];
+
 my $source_packs = [
 ## the first set for source code build will be a default option
   {
-    title   => "Source code build: Box2D 2.1.2 (RECOMMENDED)",
-    precision => 'single',
+    title   => "Source code build: Box2D 2.1.2 (needs cmake)",
     dirname => 'Box2D_v2.1.2/Box2D/Box2D',
     url => 'http://box2d.googlecode.com/files/Box2D_v2.1.2.zip',
     sha1sum  => 'b1f09f38fc130ae6c17e1767747a3a82bf8e517f',
@@ -42,6 +55,24 @@ sub check_config_script
     script    => $script,
     prefix    => $prefix,
   };
+}
+
+sub check_prebuilt_binaries
+{
+  print "Gonna check availability of prebuilt binaries ...\n";
+  print "(os=$^O cc=$cc archname=$Config{archname})\n";
+  my @good = ();
+  foreach my $b (@{$prebuilt_binaries}) {
+    if ( ($^O =~ $b->{os_re}) &&
+         ($Config{archname} =~ $b->{arch_re}) &&
+         ($cc =~ $b->{cc_re}) ) {
+      $b->{buildtype} = 'use_prebuilt_binaries';
+
+      push @good, $b;
+    }
+  }
+  #returning ARRAY of HASHREFs (sometimes more than one value)
+  return \@good;
 }
 
 sub check_src_build

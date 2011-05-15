@@ -56,6 +56,13 @@ sub ACTION_code {
     if($bp->{buildtype} eq 'use_config_script') {
       $self->config_data('script', $bp->{script});
     }
+    elsif($bp->{buildtype} eq 'use_prebuilt_binaries') {
+      # all the following functions die on error, no need to test ret values
+      $self->fetch_binaries($download);
+      $self->clean_dir($build_out);
+      $self->extract_binaries($download, $build_out);
+      $self->set_config_data($build_out);
+    }
     elsif($bp->{buildtype} eq 'build_from_sources' ) {
       # all the following functions die on error, no need to test ret values
       $self->fetch_sources($download);
@@ -94,10 +101,27 @@ sub fetch_file {
   die "###ERROR### _fetch_file failed '$fn'";
 }
 
+sub fetch_binaries {
+  my ($self, $download) = @_;
+  my $bp = $self->notes('build_params');
+  $self->fetch_file($bp->{url}, $bp->{sha1sum}, $download);
+}
+
 sub fetch_sources {
   my ($self, $download) = @_;
   my $bp = $self->notes('build_params');
   $self->fetch_file($bp->{url}, $bp->{sha1sum}, $download);
+}
+
+sub extract_binaries {
+  my ($self, $download, $build_out) = @_;
+
+  # do extract binaries
+  my $bp = $self->notes('build_params');
+  my $archive = catfile($download, File::Fetch->new(uri => $bp->{url})->file);
+  print "Extracting $archive...\n";
+  my $ae = Archive::Extract->new( archive => $archive );
+  die "###ERROR###: Cannot extract $archive ", $ae->error unless $ae->extract(to => $build_out);
 }
 
 sub extract_sources {
@@ -144,6 +168,10 @@ sub set_config_data {
     cflags      => '-I' . $self->get_path('@PrEfIx@/include'),
     shared_libs => [ ],
   };
+  
+  if($self->config_data('build_params')->{version}) {
+    $cfg->{version} = $self->config_data('build_params')->{version};
+  }
 
   # overwrite values available via ode-config (used on UNIX build)
   my $bp = $self->config_data('build_prefix') || $prefix;
