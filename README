@@ -1,61 +1,62 @@
 NAME
-    Alien::ODE - Build and make available ODE library - <http://ode.org/>
+    Alien::Box2D - Build and make available Box2D library -
+    <http://ode.org/>
 
 VERSION
     Version 1.0
 
 SYNOPSIS
-    Alien::ODE during its installation does one of the following:
+    Alien::Box2D during its installation does one of the following:
 
     *   Builds *ODE* (The Open Dynamics Engine) binaries from source codes
         and installs dev files (headers: *.h, static library: *.a) into
-        *share* directory of Alien::ODE distribution.
+        *share* directory of Alien::Box2D distribution.
 
-    *   Tries to locate an already installed ODE via 'ode-config' script.
+    *   Tries to locate an already installed Box2D via 'ode-config' script.
 
-    Later you can use Alien::ODE in your module that needs to link with
+    Later you can use Alien::Box2D in your module that needs to link with
     *libode* like this:
 
         # Sample Build.pl
         use Module::Build;
-        use Alien::ODE;
+        use Alien::Box2D;
 
         my $build = Module::Build->new(
-          module_name => 'Any::ODE::Module',
+          module_name => 'Any::Box2D::Module',
           # + other params
           build_requires => {
-                        'Alien::ODE' => 0,
+                        'Alien::Box2D' => 0,
                         # + others modules
           },
           configure_requires => {
-                        'Alien::ODE' => 0,
+                        'Alien::Box2D' => 0,
                         # + others modules
           },
-          extra_compiler_flags => Alien::ODE->config('cflags'),
-          extra_linker_flags   => Alien::ODE->config('libs'),
+          extra_compiler_flags => Alien::Box2D->config('cflags'),
+          extra_linker_flags   => Alien::Box2D->config('libs'),
         )->create_build_script;
 
-    NOTE: Alien::ODE is required only for building not for using
-    'Any::ODE::Module'.
+    NOTE: Alien::Box2D is required only for building not for using
+    'Any::Box2D::Module'.
 
 DESCRIPTION
-    In short "Alien::ODE" can be used to detect and get configuration
-    settings from an already installed ODE. It offers also an option to
-    download ODE source codes and build binaries from scratch.
+    In short "Alien::Box2D" can be used to detect and get configuration
+    settings from an already installed Box2D. It offers also an option to
+    download Box2D source codes and build binaries from scratch.
 
 METHODS
   config()
     This function is the main public interface to this module. Basic
     functionality works in a very similar maner to 'ode-config' script:
 
-        Alien::ODE->config('prefix');   # gives the same string as 'ode-config --prefix'
-        Alien::ODE->config('version');  # gives the same string as 'ode-config --version'
-        Alien::ODE->config('libs');     # gives the same string as 'ode-config --libs'
-        Alien::ODE->config('cflags');   # gives the same string as 'ode-config --cflags'
+        Alien::Box2D->config('prefix');   # gives the same string as 'ode-config --prefix'
+        Alien::Box2D->config('version');  # gives the same string as 'ode-config --version'
+        Alien::Box2D->config('libs');     # gives the same string as 'ode-config --libs'
+        Alien::Box2D->config('cflags');   # gives the same string as 'ode-config --cflags'
 
 BUGS
     Please post issues and bugs at
-    <http://rt.cpan.org/NoAuth/Bugs.html?Dist=Alien-ODE>
+    <http://rt.cpan.org/NoAuth/Bugs.html?Dist=Alien-Box2D>
 
 AUTHOR
     KMX, <kmx at cpan.org>
