@@ -30,8 +30,10 @@ sub build_binaries {
   
   # do 'cmake ...'
   print "CMaking ...\n";
-  $self->do_system('cmake', '-GMinGW Makefiles', '-DCMAKE_INSTALL_PREFIX="' . $self->config_data('build_prefix') . '"',
-                            '-DCMAKE_C_COMPILER=mingw32-gcc', '-DCMAKE_CXX_COMPILER=mingw32-g++', '-DBOX2D_INSTALL=ON', '-DBOX2D_BUILD_SHARED=ON', '..')
+  $self->do_system('cmake', '-GMinGW Makefiles', '-DCMAKE_INSTALL_PREFIX=' . $self->config_data('build_prefix'),
+                            '-DCMAKE_C_COMPILER=mingw32-gcc', '-DCMAKE_CXX_COMPILER=mingw32-g++',
+                            '-DBOX2D_INSTALL=ON', '-DBOX2D_BUILD_SHARED=OFF', '-DBOX2D_BUILD_STATIC=ON',
+                            '-DBOX2D_BUILD_EXAMPLES=OFF', '..')
   or die "###ERROR### [$?] during cmake ... ";
 
   # do 'make install'
