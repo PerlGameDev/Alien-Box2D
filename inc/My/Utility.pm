@@ -3,7 +3,7 @@ use strict;
 use warnings;
 use base qw(Exporter);
 
-our @EXPORT_OK = qw(check_config_script check_prebuilt_binaries check_src_build find_Box2D_dir find_file sed_inplace);
+our @EXPORT_OK = qw(check_prebuilt_binaries check_src_build find_Box2D_dir find_file sed_inplace);
 use Config;
 use File::Spec::Functions qw(splitdir catdir splitpath catpath rel2abs);
 use File::Find qw(find);
@@ -35,27 +35,6 @@ my $source_packs = [
   },
 ## you can add another src build set
 ];
-
-sub check_config_script
-{
-  my $script = shift || 'ode-config';
-  print "Gonna check config script...\n";
-  print "(scriptname=$script)\n";
-  my $devnull = File::Spec->devnull();
-  my $version = `$script --version 2>$devnull`;
-  return if($? >> 8);
-  my $prefix = `$script --prefix 2>$devnull`;
-  return if($? >> 8);
-  $version =~ s/[\r\n]*$//;
-  $prefix =~ s/[\r\n]*$//;
-  #returning HASHREF
-  return {
-    title     => "Already installed ODE ver=$version path=$prefix",
-    buildtype => 'use_config_script',
-    script    => $script,
-    prefix    => $prefix,
-  };
-}
 
 sub check_prebuilt_binaries
 {

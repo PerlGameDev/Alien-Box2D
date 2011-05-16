@@ -3,7 +3,7 @@ use warnings;
 
 use lib "inc";
 use File::Spec::Functions qw(catdir catfile);
-use My::Utility qw(check_config_script check_prebuilt_binaries check_src_build);
+use My::Utility qw(check_prebuilt_binaries check_src_build);
 
 #### we need the platform-specific module
 my %platforms =(
@@ -75,10 +75,6 @@ if($rv=check_prebuilt_binaries($build->os_type)) {
 
 if($rv=check_src_build($build->os_type)) {
   push @candidates, @{$rv};
-};
-
-if($rv=check_config_script("ode-config")) {
-  push @candidates, $rv;
 };
 
 push @candidates, { title => 'Quit installation' };

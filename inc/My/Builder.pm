@@ -173,19 +173,6 @@ sub set_config_data {
     $cfg->{version} = $self->config_data('build_params')->{version};
   }
 
-  # overwrite values available via ode-config (used on UNIX build)
-  my $bp = $self->config_data('build_prefix') || $prefix;
-  my $devnull = File::Spec->devnull();
-  my $script = rel2abs("$prefix/bin/ode-config");
-  foreach my $p (qw(version prefix libs cflags)) {
-    my $o=`$script --$p 2>$devnull`;
-    if ($o) {
-      $o =~ s/[\r\n]*$//;
-      $o =~ s/\Q$prefix\E/\@PrEfIx\@/g;
-      $cfg->{$p} = $o;
-    }
-  }
-
   # write config
   $self->config_data('config', $cfg);
 }

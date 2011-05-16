@@ -32,6 +32,7 @@ sub build_binaries {
   print "CMaking ...\n";
   $self->do_system('cmake', '-GMinGW Makefiles', '-DCMAKE_INSTALL_PREFIX=' . $self->config_data('build_prefix'),
                             '-DCMAKE_C_COMPILER=mingw32-gcc', '-DCMAKE_CXX_COMPILER=mingw32-g++',
+                            '-DCMAKE_MAKE_PROGRAM=mingw32-make',
                             '-DBOX2D_INSTALL=ON', '-DBOX2D_BUILD_SHARED=OFF', '-DBOX2D_BUILD_STATIC=ON',
                             '-DBOX2D_BUILD_EXAMPLES=OFF', '..')
   or die "###ERROR### [$?] during cmake ... ";
@@ -53,7 +54,7 @@ sub get_make {
   my %tested;
   print "Gonna detect GNU make:\n";
   
-  return 'mingw32-make';
+  #return 'mingw32-make';
   
   foreach my $name ( @try ) {
     next unless $name;

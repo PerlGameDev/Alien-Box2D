@@ -1,18 +1,16 @@
 NAME
     Alien::Box2D - Build and make available Box2D library -
-    <http://ode.org/>
+    <http://box2d.org/>
 
 VERSION
-    Version 1.0
+    Version 0.1
 
 SYNOPSIS
     Alien::Box2D during its installation does one of the following:
 
-    *   Builds *ODE* (The Open Dynamics Engine) binaries from source codes
-        and installs dev files (headers: *.h, static library: *.a) into
-        *share* directory of Alien::Box2D distribution.
-
-    *   Tries to locate an already installed Box2D via 'ode-config' script.
+    *   Builds *ODE* binaries from source codes and installs dev files
+        (headers: *.h, static library: *.a) into *share* directory of
+        Alien::Box2D distribution.
 
     Later you can use Alien::Box2D in your module that needs to link with
     *libode* like this:
@@ -46,13 +44,12 @@ DESCRIPTION
 
 METHODS
   config()
-    This function is the main public interface to this module. Basic
-    functionality works in a very similar maner to 'ode-config' script:
+    This function is the main public interface to this module:
 
-        Alien::Box2D->config('prefix');   # gives the same string as 'ode-config --prefix'
-        Alien::Box2D->config('version');  # gives the same string as 'ode-config --version'
-        Alien::Box2D->config('libs');     # gives the same string as 'ode-config --libs'
-        Alien::Box2D->config('cflags');   # gives the same string as 'ode-config --cflags'
+        Alien::Box2D->config('prefix');
+        Alien::Box2D->config('version');
+        Alien::Box2D->config('libs');
+        Alien::Box2D->config('cflags');
 
 BUGS
     Please post issues and bugs at
