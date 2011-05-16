@@ -15,9 +15,9 @@ our $cc = $Config{cc};
 my $prebuilt_binaries = [
     {
       title    => "Binaries Win/32bit Box2D-2.1.2",
-      url      => 'http://froggs.de/libbox2d/Win32_Box2D-2.1.2_20110515.zip',
+      url      => 'http://froggs.de/libbox2d/Win32_Box2D-2.1.2_20110516.zip',
       version  => '2.1.2',
-      sha1sum  => 'cf33d16415dacb39bb25f03d456e2ef006641944',
+      sha1sum  => '451dc65f3a1719945336b592f113ce8474ac358e',
       arch_re  => qr/^MSWin32-x86-multi-thread$/,
       os_re    => qr/^MSWin32$/,
       cc_re    => qr/cc/,
