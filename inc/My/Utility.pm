@@ -3,7 +3,7 @@ use strict;
 use warnings;
 use base qw(Exporter);
 
-our @EXPORT_OK = qw(check_prebuilt_binaries check_src_build find_Box2D_dir find_file sed_inplace);
+our @EXPORT_OK = qw(check_prebuilt_binaries check_src_build find_Box2D_dir find_file sed_inplace get_dlext);
 use Config;
 use File::Spec::Functions qw(splitdir catdir splitpath catpath rel2abs);
 use File::Find qw(find);
@@ -112,6 +112,19 @@ sub sed_inplace {
     }
     close INPF;
     close OUTF;
+  }
+}
+
+sub get_dlext {
+  if($^O =~ /darwin/) { # there can be .dylib's on a mac even if $Config{dlext} is 'bundle'
+    return 'so|dylib|bundle';
+  }
+  elsif( $^O =~ /cygwin/)
+  {  
+    return 'la';
+  }
+  else {
+    return $Config{dlext};
   }
 }
 

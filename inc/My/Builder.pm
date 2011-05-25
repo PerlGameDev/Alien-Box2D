@@ -169,6 +169,10 @@ sub set_config_data {
     shared_libs => [ ],
   };
   
+  if($^O eq /(bsd|linux)/) {
+    $cfg->{libs} = '-L' . $self->get_path('@PrEfIx@/lib') . ' -Wl,-rpath,' . $self->get_path('@PrEfIx@/lib') . ' -lBox2D',
+  }
+
   if($self->config_data('build_params')->{version}) {
     $cfg->{version} = $self->config_data('build_params')->{version};
   }
