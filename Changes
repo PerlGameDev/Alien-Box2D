@@ -1,4 +1,7 @@
 Version history for Perl module Alien::Box2D
 
+0.101	25/05/2010
+	- used install_name_tool to update libBox2D.dylib search path for darwin
+
 0.1	16/05/2010
 	- initial version

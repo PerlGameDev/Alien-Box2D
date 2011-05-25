@@ -6,8 +6,23 @@ use base 'My::Builder';
 
 use File::Spec::Functions qw(catdir catfile rel2abs);
 use File::ShareDir;
+use Digest::SHA qw(sha1_hex);
 use Config;
 use My::Utility qw(find_file get_dlext);
+
+sub ACTION_test
+{
+  my $self = shift;
+  if($^O eq 'darwin') {
+    my $sharedir     = eval {File::ShareDir::dist_dir('Alien-SDL')} || '';
+    my $share_subdir = $self->{properties}->{dist_version} . '_' . substr(sha1_hex($self->notes('build_params')->{title}), 0, 8);
+    my $dlext        = get_dlext();
+    my ($libname)    = find_file("sharedir/$share_subdir/lib", qr/\.$dlext[\d\.]+$/);
+    $self->do_system("install_name_tool -id $libname $libname");
+  }
+
+  $self->SUPER::ACTION_test;
+}
 
 sub ACTION_install
 {
@@ -17,10 +32,9 @@ sub ACTION_install
     my $share_subdir = $self->{properties}->{dist_version} . '_' . substr(sha1_hex($self->notes('build_params')->{title}), 0, 8);
     my $dlext        = get_dlext();
     my ($libname)    = find_file("sharedir/$share_subdir/lib", qr/\.$dlext[\d\.]+$/);
-    $self->do_system('install_name_tool', "-id $sharedir/lib/$libname", "sharedir/$share_subdir/lib/$libname");
-    warn "install_name_tool -id $sharedir/lib/$libname sharedir/$share_subdir/lib/$libname";
+    $libname         = $1 if $libname =~ /([^\\\/]+)$/;
+    $self->do_system("install_name_tool -id $sharedir/lib/$libname sharedir/$share_subdir/lib/$libname");
   }
-  exit;
 
   $self->SUPER::ACTION_install;
 }
