@@ -34,6 +34,7 @@ my $build = $package->new(
     'Digest::SHA'      => '0',
     'Archive::Extract' => '0',
     'Archive::Tar'     => '0',
+	'Archive::Zip'	   => '0',
     'Module::Build'    => '0.36',
   },
   configure_requires   => {  #need to have for running: perl Buil.PL
