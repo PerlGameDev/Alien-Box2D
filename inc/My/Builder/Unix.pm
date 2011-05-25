@@ -14,9 +14,9 @@ sub ACTION_install
   if($^O eq 'darwin') {
     my $self         = shift;
     my $sharedir     = eval {File::ShareDir::dist_dir('Alien-SDL')} || '';
-    my $share_subdir = $self->{properties}->{dist_version} . '_' . substr(sha1_hex($bp->{title}), 0, 8);
+    my $share_subdir = $self->{properties}->{dist_version} . '_' . substr(sha1_hex($self->notes('build_params')->{title}), 0, 8);
     my $dlext        = get_dlext();
-    my ($libname)    = find_file($build_out, qr/\.$dlext[\d\.]+$/);;
+    my ($libname)    = find_file("sharedir/$share_subdir/lib", qr/\.$dlext[\d\.]+$/);
     $self->do_system('install_name_tool', "-id $sharedir/lib/$libname", "sharedir/$share_subdir/lib/$libname");
     warn "install_name_tool -id $sharedir/lib/$libname sharedir/$share_subdir/lib/$libname";
   }
