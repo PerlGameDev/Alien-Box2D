@@ -11,8 +11,8 @@ use My::Utility qw(find_file get_dlext);
 
 sub ACTION_install
 {
+  my $self = shift;
   if($^O eq 'darwin') {
-    my $self         = shift;
     my $sharedir     = eval {File::ShareDir::dist_dir('Alien-SDL')} || '';
     my $share_subdir = $self->{properties}->{dist_version} . '_' . substr(sha1_hex($self->notes('build_params')->{title}), 0, 8);
     my $dlext        = get_dlext();
