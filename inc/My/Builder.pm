@@ -5,12 +5,13 @@ use warnings;
 use base 'Module::Build';
 
 use lib "inc";
-use My::Utility qw(find_Box2D_dir find_file sed_inplace);
+use My::Utility qw(find_Box2D_dir find_file sed_inplace get_dlext);
 use File::Spec::Functions qw(catdir catfile splitpath catpath rel2abs abs2rel);
 use File::Path qw(make_path remove_tree);
 use File::Copy qw(cp);
 use File::Fetch;
 use File::Find;
+use File::ShareDir;
 use Archive::Extract;
 use Digest::SHA qw(sha1_hex);
 use Config;
@@ -30,16 +31,17 @@ sub ACTION_code {
   my $bp = $self->notes('build_params');
   die "###ERROR### Cannot continue build_params not defined" unless defined($bp);
 
+  # we are deriving the subdir name from $bp->{title} as we want to
+  # prevent troubles when user reinstalls the same version of
+  # Alien::Box2D with different build options
+  my $share_subdir = $self->{properties}->{dist_version} . '_' . substr(sha1_hex($bp->{title}), 0, 8);
+
   # check marker
   if (! $self->check_build_done_marker) {
 
     # important directories
     my $download     = 'download';
     my $patches      = 'patches';
-    # we are deriving the subdir name from $bp->{title} as we want to
-    # prevent troubles when user reinstalls the same version of
-    # Alien::Box2D with different build options
-    my $share_subdir = $self->{properties}->{dist_version} . '_' . substr(sha1_hex($bp->{title}), 0, 8);
     my $build_out    = catfile('sharedir', $share_subdir);
     my $build_src    = 'build_src';
     $self->add_to_cleanup($build_src, $build_out);
@@ -74,6 +76,23 @@ sub ACTION_code {
 
     # mark sucessfully finished build
     $self->touch_build_done_marker;
+  }
+  
+  if($^O eq 'darwin') {
+    my $sharedir     = eval {File::ShareDir::dist_dir('Alien-SDL')} || '';
+    my $dlext        = get_dlext();
+    my ($libname)    = find_file("sharedir/$share_subdir/lib", qr/\.$dlext[\d\.]+$/);
+    if($self->invoked_action() eq 'test') {
+      my $cmd = "install_name_tool -id $libname $libname";
+      print "Changing lib id ...\n(cmd: $cmd)\n";
+      $self->do_system($cmd);
+    }
+    elsif($self->invoked_action() eq 'install') {
+      $libname         = $1 if $libname =~ /([^\\\/]+)$/;
+      my $cmd = "install_name_tool -id $sharedir/lib/$libname sharedir/$share_subdir/lib/$libname";
+      print "Changing lib id ...\n(cmd: $cmd)\n";
+      $self->do_system($cmd);
+    }
   }
 
   $self->SUPER::ACTION_code;
@@ -169,7 +188,7 @@ sub set_config_data {
     shared_libs => [ ],
   };
   
-  if($^O eq /(bsd|linux)/) {
+  if($^O =~ /(bsd|linux)/) {
     $cfg->{libs} = '-L' . $self->get_path('@PrEfIx@/lib') . ' -Wl,-rpath,' . $self->get_path('@PrEfIx@/lib') . ' -lBox2D',
   }
 
