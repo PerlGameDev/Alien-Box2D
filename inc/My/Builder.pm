@@ -79,7 +79,7 @@ sub ACTION_code {
   }
   
   if($^O eq 'darwin') {
-    my $sharedir     = eval {File::ShareDir::dist_dir('Alien-SDL')} || '';
+    my $sharedir     = eval {File::ShareDir::dist_dir('Alien-Box2D')} || '';
     my $dlext        = get_dlext();
     my ($libname)    = find_file("sharedir/$share_subdir/lib", qr/\.$dlext[\d\.]+$/);
     if($self->invoked_action() eq 'test') {
@@ -89,7 +89,7 @@ sub ACTION_code {
     }
     elsif($self->invoked_action() eq 'install') {
       $libname         = $1 if $libname =~ /([^\\\/]+)$/;
-      my $cmd = "install_name_tool -id $sharedir/lib/$libname sharedir/$share_subdir/lib/$libname";
+      my $cmd = "install_name_tool -id $sharedir/$share_subdir/lib/$libname sharedir/$share_subdir/lib/$libname";
       print "Changing lib id ...\n(cmd: $cmd)\n";
       $self->do_system($cmd);
     }
