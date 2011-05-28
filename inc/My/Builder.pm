@@ -189,7 +189,7 @@ sub set_config_data {
   };
   
   if($^O =~ /(bsd|linux)/) {
-    $cfg->{libs} = '-L' . $self->get_path('@PrEfIx@/lib') . ' -Wl,-rpath,' . $self->get_path('@PrEfIx@/lib') . ' -lBox2D',
+    $cfg->{libs} = '-L' . $self->get_path('@PrEfIx@/lib') . ' -Wl,-rpath,' . $self->get_path('@PrEfIx@/lib') . ' -lBox2D -lm',
   }
 
   if($self->config_data('build_params')->{version}) {

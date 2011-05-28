@@ -49,7 +49,7 @@ sub build_binaries {
 sub get_cmake_cmd {
   my ($self, $prefixdir) = @_;
 
-  my $cmd = sprintf('cmake -DCMAKE_INSTALL_PREFIX="%s" -DBOX2D_INSTALL=ON -DBOX2D_BUILD_SHARED=ON ..',
+  my $cmd = sprintf('cmake -DCMAKE_INSTALL_PREFIX="%s" -DBOX2D_INSTALL=ON -DBOX2D_BUILD_SHARED=ON -DBOX2D_BUILD_EXAMPLES=OFF ..',
     $self->config_data('build_prefix'));
 
   return $cmd;
