@@ -1,7 +1,12 @@
 Version history for Perl module Alien::Box2D
 
+0.102	28/05/2010
+	- disabled build of examples [FROGGS]
+	- LIBS: linking to libm for e.g. openbsd [FROGGS]
+	- DEPS: using Alien::CMake 0.03 [FROGGS]
+
 0.101	25/05/2010
-	- used install_name_tool to update libBox2D.dylib search path for darwin
+	- used install_name_tool to update libBox2D.dylib search path for darwin [jtpalmer, FROGGS]
 
 0.1	16/05/2010
 	- initial version

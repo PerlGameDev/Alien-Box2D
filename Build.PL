@@ -36,7 +36,7 @@ my $build = $package->new(
     'Archive::Tar'     => '0',
 	'Archive::Zip'	   => '0',
     'Module::Build'    => '0.36',
-    'Alien::CMake'     => '0.02',
+    'Alien::CMake'     => '0.03',
   },
   configure_requires   => {  #need to have for running: perl Build.PL
     'File::Spec'       => '0',
@@ -47,7 +47,7 @@ my $build = $package->new(
     'Digest::SHA'      => '0',
     'Archive::Extract' => '0',
     'Module::Build'    => '0.36',
-    'Alien::CMake'     => '0.02',
+    'Alien::CMake'     => '0.03',
   },
   meta_merge => {
     resources  => {
