@@ -3,12 +3,13 @@
 use Test::More;
 use Alien::Box2D;
 use ExtUtils::CppGuess;
+use Config;
 
 my $cppguess = ExtUtils::CppGuess->new;
 my %cppflags = $cppguess->module_build_options;
 
-my $cflags = Alien::Box2D->config('cflags') . $cppflags{extra_compiler_flags};
-my $lflags = Alien::Box2D->config('libs') . $cppflags{extra_linker_flags};
+my $cflags = Alien::Box2D->config('cflags') . ' ' . $cppflags{extra_compiler_flags} . ' ' . $Config{ccflags};
+my $lflags = Alien::Box2D->config('libs') . ' ' . $cppflags{extra_linker_flags} . ' ' . $Config{ldflags};
 
 eval "use ExtUtils::CBuilder 0.2703";
 plan skip_all => "ExtUtils::CBuilder 0.2703 required for this test" if $@;

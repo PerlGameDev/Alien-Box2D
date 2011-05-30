@@ -180,6 +180,10 @@ sub build_binaries {
   my $makefile = $^O eq 'MSWin32' ? rel2abs('patches/Makefile.mingw') : rel2abs('patches/Makefile.unix'); 
   my $cxxflags = '-O3';
   $cxxflags .= ' -fPIC' if $Config{cccdlflags} =~ /-fPIC/;
+  # MacOSX related flags
+  $cxxflags .= ' -arch x86_64' if $Config{ccflags} =~ /-arch x86_64/;
+  $cxxflags .= ' -arch i386' if $Config{ccflags} =~ /-arch i386/;
+  $cxxflags .= ' -arch ppc' if $Config{ccflags} =~ /-arch ppc/;
 
   print "Gonna read version info from $srcdir/Common/b2Settings.cpp\n";
   open(DAT, "$srcdir/Common/b2Settings.cpp") || die;
