@@ -24,6 +24,7 @@ my $build = My::Builder->new(
     'Digest::SHA'      => '0',
     'Archive::Extract' => '0',
     'Module::Build'    => '0.36',
+    'ExtUtils::CppGuess' => '0',
   },
   configure_requires   => {  #need to have for running: perl Build.PL
     'File::Spec'       => '0',
@@ -44,7 +45,7 @@ my $build = My::Builder->new(
   create_readme => 1,
   share_dir => 'sharedir',
   # sharedir is used for storing compiled/prebuilt binaries of Box2D lib
-  # avoid using 'share' name as M::B doe not handle well paths like /xx/yy/share/zz/ww/share/xx
+  # avoid using 'share' name as M::B does not handle well paths like /xx/yy/share/zz/ww/share/xx
 );
 $build->create_build_script();
 
