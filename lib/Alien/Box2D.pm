@@ -13,11 +13,11 @@ Alien::Box2D - Build and make available Box2D library - L<http://box2d.org/>
 
 =head1 VERSION
 
-Version 0.102
+Version 0.102_1
 
 =cut
 
-our $VERSION = '0.102';
+our $VERSION = '0.102_1';
 $VERSION = eval $VERSION;
 
 =head1 SYNOPSIS
@@ -26,13 +26,13 @@ Alien::Box2D during its installation does one of the following:
 
 =over
 
-=item * Builds I<ODE> binaries from source codes and installs dev 
+=item * Builds I<Box2D> binaries from source codes and installs dev 
 files (headers: *.h, static library: *.a) into I<share>
 directory of Alien::Box2D distribution.
 
 =back
 
-Later you can use Alien::Box2D in your module that needs to link with I<libode>
+Later you can use Alien::Box2D in your module that needs to link with I<libBox2D>
 like this:
 
     # Sample Build.pl

@@ -1,5 +1,8 @@
 Version history for Perl module Alien::Box2D
 
+0.102_1	NEXT
+	- cmake-less version [kmx]
+
 0.102	28/05/2010
 	- disabled build of examples [FROGGS]
 	- LIBS: linking to libm for e.g. openbsd [FROGGS]

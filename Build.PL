@@ -2,20 +2,10 @@ use strict;
 use warnings;
 
 use lib "inc";
-use File::Spec::Functions qw(catdir catfile);
-use My::Utility qw(check_prebuilt_binaries check_src_build);
+use My::Builder;
 
-#### we need the platform-specific module
-my %platforms =(
-       # Unix = default, thus not listing all UNIX like systems
-       MSWin32 => 'Windows',       
-);
-my $package = 'My::Builder::' . ($platforms{$^O} || 'Unix');
-print "Gonna use '$package' class ...\n";
-eval "require $package" or die "Require '$package' failed: $@\n";
-
-#### Stadard Module::Builder stuff
-my $build = $package->new(
+#### Stadard Module::Build stuff
+my $build = My::Builder->new(
   module_name          => 'Alien::Box2D',
   all_from             => 'lib/Alien/Box2D.pm',
   dist_author	       => 'KMX <kmx@cpan.org>',
@@ -27,27 +17,23 @@ my $build = $package->new(
   build_requires       => {  #need to have for running: ./Build (install|test)
     'File::Spec'       => '0',
     'File::ShareDir'   => '0',
-    'File::Path'       => '2.07',
+    'File::Path'       => '0',
     'File::Copy'       => '0',
     'File::Fetch'      => '0',
     'File::Find'       => '0',
     'Digest::SHA'      => '0',
     'Archive::Extract' => '0',
-    'Archive::Tar'     => '0',
-	'Archive::Zip'	   => '0',
     'Module::Build'    => '0.36',
-    'Alien::CMake'     => '0.03',
   },
   configure_requires   => {  #need to have for running: perl Build.PL
     'File::Spec'       => '0',
-    'File::Path'       => '2.07',
+    'File::Path'       => '0',
     'File::Copy'       => '0',
     'File::Fetch'      => '0',
     'File::Find'       => '0',
     'Digest::SHA'      => '0',
     'Archive::Extract' => '0',
     'Module::Build'    => '0.36',
-    'Alien::CMake'     => '0.03',
   },
   meta_merge => {
     resources  => {
@@ -65,36 +51,9 @@ $build->create_build_script();
 #### clean build_done stamp; force rebuild when running 'Build'
 $build->clean_build_done_marker;
 
-print "\nWelcome to Alien::Box2D module installation";
-print "\n-----------------------------------------\n\n";
-
 #### check what options we have for our platform
-my $rv;
-my @candidates = ();
-
-if($rv=check_prebuilt_binaries($build->os_type)) {
-  push @candidates, @{$rv};
-};
-
-if($rv=check_src_build($build->os_type)) {
-  push @candidates, @{$rv};
-};
-
-push @candidates, { title => 'Quit installation' };
-
-#### ask user what way to go
-my $i = 1;
-my $prompt_string = "\nYou have the following options:\n";
-foreach my $c (@candidates) {
-  $prompt_string .= "[" . $i++ . "] " . $c->{title} . "\n"
-}
-$prompt_string .= "\nWhat way do you wanna go?";
-my $ans = $build->prompt($prompt_string, 1);
-
-#### store build params into 'notes'
-if(($ans>0) && ($ans<scalar(@candidates))) {
-  $build->notes('build_params', $candidates[$ans-1]);
-}
-else {
-  $build->notes('build_params', undef); # just to be sure
-}
+$build->notes('build_params', { dirname => 'Box2D_v2.1.2/Box2D/Box2D',
+                                url => 'http://box2d.googlecode.com/files/Box2D_v2.1.2.zip',
+                                sha1sum  => 'b1f09f38fc130ae6c17e1767747a3a82bf8e517f',
+                                patches => [ ],
+                              } );

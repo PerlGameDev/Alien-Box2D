@@ -3,17 +3,17 @@ NAME
     <http://box2d.org/>
 
 VERSION
-    Version 0.102
+    Version 0.102_1
 
 SYNOPSIS
     Alien::Box2D during its installation does one of the following:
 
-    *   Builds *ODE* binaries from source codes and installs dev files
+    *   Builds *Box2D* binaries from source codes and installs dev files
         (headers: *.h, static library: *.a) into *share* directory of
         Alien::Box2D distribution.
 
     Later you can use Alien::Box2D in your module that needs to link with
-    *libode* like this:
+    *libBox2D* like this:
 
         # Sample Build.pl
         use Module::Build;
