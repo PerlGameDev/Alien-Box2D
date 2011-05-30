@@ -6,9 +6,9 @@ HEADERS    =Collision/b2BroadPhase.h Collision/b2Collision.h Collision/b2Distanc
 CXXFLAGS   =-O3
 
 PERL       =perl
-CP         ="$(PERL)" -MExtUtils::Command -e "cp" --
-RM_F       ="$(PERL)" -MExtUtils::Command -e "rm_f" --
-MKPATH     ="$(PERL)" -MExtUtils::Command -e "mkpath" --
+CP         =$(PERL) -MExtUtils::Command -e cp --
+RM_F       =$(PERL) -MExtUtils::Command -e rm_f --
+MKPATH     =$(PERL) -MExtUtils::Command -e mkpath --
 
 RANLIB     =ranlib
 CXX        =g++
