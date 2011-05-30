@@ -66,22 +66,23 @@ sub ACTION_code {
     $self->touch_build_done_marker;
   }
   
-  if($^O eq 'darwin') {
-    my $sharedir     = eval {File::ShareDir::dist_dir('Alien-Box2D')} || '';
-    my $dlext        = 'so|dylib|bundle';
-    my ($libname)    = $self->find_file("$build_out/lib", qr/\.$dlext[\d\.]+$/);
-    if($self->invoked_action() eq 'test') {
-      my $cmd = "install_name_tool -id $libname $libname";
-      print "Changing lib id ...\n(cmd: $cmd)\n";
-      $self->do_system($cmd);
-    }
-    elsif($self->invoked_action() eq 'install') {
-      $libname         = $1 if $libname =~ /([^\\\/]+)$/;
-      my $cmd = "install_name_tool -id $sharedir/$share_subdir/lib/$libname sharedir/$share_subdir/lib/$libname";
-      print "Changing lib id ...\n(cmd: $cmd)\n";
-      $self->do_system($cmd);
-    }
-  }
+  #### as we are building just a static library the following is not (perhaps) necessary
+  #if($^O eq 'darwin') {
+  #  my $sharedir     = eval {File::ShareDir::dist_dir('Alien-Box2D')} || '';
+  #  my $dlext        = 'so|dylib|bundle';
+  #  my ($libname)    = $self->find_file("$build_out/lib", qr/\.$dlext[\d\.]+$/);
+  #  if($self->invoked_action() eq 'test') {
+  #    my $cmd = "install_name_tool -id $libname $libname";
+  #    print "Changing lib id ...\n(cmd: $cmd)\n";
+  #    $self->do_system($cmd);
+  #  }
+  #  elsif($self->invoked_action() eq 'install') {
+  #    $libname         = $1 if $libname =~ /([^\\\/]+)$/;
+  #    my $cmd = "install_name_tool -id $sharedir/$share_subdir/lib/$libname sharedir/$share_subdir/lib/$libname";
+  #    print "Changing lib id ...\n(cmd: $cmd)\n";
+  #    $self->do_system($cmd);
+  #  }
+  #}
 
   $self->SUPER::ACTION_code;
 }
