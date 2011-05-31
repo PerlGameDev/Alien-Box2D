@@ -13,6 +13,7 @@ use File::Find;
 use File::ShareDir;
 use Archive::Extract;
 use Digest::SHA qw(sha1_hex);
+use Text::Patch;
 use Config;
 
 sub ACTION_build {
@@ -47,7 +48,6 @@ sub ACTION_code {
 
     # important directories
     my $download     = 'download';
-    my $patches      = 'patches';
     my $build_src    = 'build_src';
     $self->add_to_cleanup($build_src, $build_out);
 
@@ -57,7 +57,7 @@ sub ACTION_code {
     $self->config_data('config', {}); # just to be sure
 
     $self->fetch_sources($download);
-    $self->extract_sources($download, $patches, $build_src);
+    $self->extract_sources($download, $build_src);    
     $self->clean_dir($build_out);
     $self->build_binaries($build_out, $build_src);
     $self->set_config_data($build_out);
@@ -116,7 +116,7 @@ sub fetch_sources {
 }
 
 sub extract_sources {
-  my ($self, $download, $patches, $build_src) = @_;
+  my ($self, $download, $build_src) = @_;
   my $bp = $self->notes('build_params');
 
   my $srcdir = catfile($build_src, $bp->{dirname});
@@ -128,16 +128,7 @@ sub extract_sources {
     print "Extracting sources...\n";
     my $ae = Archive::Extract->new( archive => $archive );
     die "###ERROR###: cannot extract $bp ", $ae->error unless $ae->extract(to => $build_src);
-    foreach my $i (@{$bp->{patches}}) {
-      chdir $srcdir;
-      print "Applying patch '$i'\n";
-      my $cmd = $self->patch_command($srcdir, catfile($patches, $i));
-      if ($cmd) {
-        print "(cmd: $cmd)\n";
-        $self->do_system($cmd) or die "###ERROR### [$?] during patch ... ";
-      }
-      chdir $self->base_dir();
-    }
+    $self->apply_patch($build_src, $_) foreach (@{$bp->{patches}});
   }
   return 1;
 }
@@ -260,5 +251,43 @@ sub quote_literal {
     return $txt;    
 }
 
+# pure perl implementation of patch functionality
+sub apply_patch {
+  my ($self, $dir_to_be_patched, $patch_file) = @_;
+  my ($src, $diff);
+
+  undef local $/;
+  open(DAT, $patch_file) or die "###ERROR### Cannot open file: '$patch_file'\n";
+  $diff = <DAT>;
+  close(DAT);
+  $diff =~ s/\r\n/\n/g; #normalise newlines
+  $diff =~ s/\ndiff /\nSpLiTmArKeRdiff /g;
+  my @patches = split('SpLiTmArKeR', $diff);
+
+  print STDERR "Applying patch file: '$patch_file'\n";
+  foreach my $p (@patches) {
+    my ($k) = map{$_ =~ /\n---\s*([\S]+)/} $p;
+    # doing the same like -p1 for 'patch'
+    $k =~ s|\\|/|g;
+    $k =~ s|^[^/]*/(.*)$|$1|;
+    $k = catfile($dir_to_be_patched, $k);
+    print STDERR "- gonna patch '$k'\n" if $self->notes('build_debug_info');
+
+    open(SRC, $k) or die "###ERROR### Cannot open file: '$k'\n";
+    $src  = <SRC>;
+    close(SRC);
+    $src =~ s/\r\n/\n/g; #normalise newlines
+
+    my $out = eval { Text::Patch::patch( $src, $p, { STYLE => "Unified" } ) };
+    if ($out) {
+      open(OUT, ">", $k) or die "###ERROR### Cannot open file for writing: '$k'\n";
+      print(OUT $out);
+      close(OUT);
+    }
+    else {
+      warn "###WARN### Patching '$k' failed: $@";
+    }
+  }
+}
 
 1;

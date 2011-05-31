@@ -24,6 +24,7 @@ my $build = My::Builder->new(
     'Digest::SHA'      => '0',
     'Archive::Extract' => '0',
     'Module::Build'    => '0.36',
+    'Text::Patch'      => '0',
     'ExtUtils::CppGuess' => '0',
   },
   configure_requires   => {  #need to have for running: perl Build.PL
@@ -33,8 +34,9 @@ my $build = My::Builder->new(
     'File::Fetch'      => '0',
     'File::Find'       => '0',
     'Digest::SHA'      => '0',
-    'Archive::Extract' => '0',
+    'Archive::Extract' => '0',    
     'Module::Build'    => '0.36',
+    'Text::Patch'      => '0',
   },
   meta_merge => {
     resources  => {
@@ -56,5 +58,5 @@ $build->clean_build_done_marker;
 $build->notes('build_params', { dirname => 'Box2D_v2.1.2/Box2D/Box2D',
                                 url => 'http://box2d.googlecode.com/files/Box2D_v2.1.2.zip',
                                 sha1sum  => 'b1f09f38fc130ae6c17e1767747a3a82bf8e517f',
-                                patches => [ ],
+                                patches => [ 'patches/mingw-minmax.diff' ],
                               } );
