@@ -20,7 +20,7 @@ clean:
 	$(RM_F) $(OBJS) $(STATIC_LIB)
 
 $(STATIC_LIB): $(OBJS)
-	$(AR) $(ARFLAGS) $@ $^
+	$(AR) $(ARFLAGS) $@ $(OBJS)
 	$(RANLIB) $@
 
 .cpp.o:
