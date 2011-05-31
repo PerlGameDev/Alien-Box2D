@@ -3,7 +3,7 @@ NAME
     <http://box2d.org/>
 
 VERSION
-    Version 0.102_1
+    Version 0.102_2
 
 SYNOPSIS
     Alien::Box2D during its installation does one of the following:
