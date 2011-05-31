@@ -187,7 +187,7 @@ sub build_binaries {
   }
   
   chdir $srcdir;
-  my @cmd = ($Config{make}, '-f', $makefile, "PREFIX=$prefixdir", 'install');
+  my @cmd = ($self->_get_make, '-f', $makefile, "PREFIX=$prefixdir", 'install');
   push @cmd, "CXXFLAGS=$cxxflags" if $cxxflags;
   #push @cmd, "CXX=g++"; ### the default in makefile.unix is 'c++' - here you can override it
   printf("(cmd: %s)\n", join(' ', @cmd));
@@ -288,6 +288,38 @@ sub apply_patch {
       warn "###WARN### Patching '$k' failed: $@";
     }
   }
+}
+
+sub _get_make {
+  my ($self) = @_;
+  
+  return $Config{make} if $^O eq 'MSWin32';
+  
+  my @try = ($Config{gmake}, 'gmake', 'make', $Config{make});
+  my %tested;
+  print "Gonna detect GNU make:\n";
+  foreach my $name ( @try ) {
+    next unless $name;
+    next if $tested{$name};
+    $tested{$name} = 1;
+    print "- testing: '$name'\n";
+    if ($self->_is_gnu_make($name)) {
+      print "- found: '$name'\n";
+      return $name
+    }
+  }
+  print "- fallback to: 'make'\n";
+  return 'make';
+}
+
+sub _is_gnu_make {
+  my ($self, $name) = @_;
+  my $devnull = File::Spec->devnull();
+  my $ver = `$name --version 2> $devnull`;
+  if ($ver =~ /GNU Make/i) {
+    return 1;
+  }
+  return 0;
 }
 
 1;
