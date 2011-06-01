@@ -306,7 +306,7 @@ sub apply_patch {
 sub _get_make {
   my ($self) = @_;
   
-  return $Config{make} if $^O eq 'MSWin32';
+  return $Config{make} if $^O =~ /^(cygwin|MSWin32)$/;
   
   my @try = ($Config{gmake}, 'gmake', 'make', $Config{make});
   my %tested;
