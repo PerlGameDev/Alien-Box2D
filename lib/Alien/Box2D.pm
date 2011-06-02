@@ -13,11 +13,11 @@ Alien::Box2D - Build and make available Box2D library - L<http://box2d.org/>
 
 =head1 VERSION
 
-Version 0.102_2
+Version 0.102_3
 
 =cut
 
-our $VERSION = '0.102_2';
+our $VERSION = '0.102_3';
 $VERSION = eval $VERSION;
 
 =head1 SYNOPSIS
