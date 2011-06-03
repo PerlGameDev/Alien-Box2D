@@ -154,12 +154,14 @@ sub build_binaries {
   my $cxxflags = '-O3';
   $cxxflags .= ' -fPIC' if $Config{cccdlflags} =~ /-fPIC/;
   # MacOSX related flags
-  # XXX FIXME
-  # does not work well see
-  # http://www.cpantesters.org/cpan/report/3034ded6-8d49-11e0-961e-c9b51fb1acdd
-  $cxxflags .= ' -arch x86_64' if $Config{ccflags} =~ /-arch x86_64/;
-  $cxxflags .= ' -arch i386' if $Config{ccflags} =~ /-arch i386/;
-  $cxxflags .= ' -arch ppc' if $Config{ccflags} =~ /-arch ppc/;
+  # 'as' for 'arch' can be in /usr/libexec/gcc/darwin/<arch_type>/as or in /usr/local/libexec/gcc/darwin/<arch_type>/as
+  foreach my $arch (qw(x86_64 i386 ppc)) {
+    if($Config{ccflags} =~ /-arch \Q$arch\E/
+    && (-e "/usr/libexec/gcc/darwin/$arch/as"
+     || -e "/usr/local/libexec/gcc/darwin/$arch/as")) {
+      $cxxflags .= " -arch $arch";
+    }
+  }
 
   ### workaround for http://www.cpantesters.org/cpan/report/16e1fb62-8bc3-11e0-a7f7-6524785ebe45
   #On solaris, some tools like 'ar' are not in the default PATH, but in /usr/???/bin
