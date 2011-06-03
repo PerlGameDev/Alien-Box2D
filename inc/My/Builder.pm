@@ -65,24 +65,6 @@ sub ACTION_code {
     # mark sucessfully finished build
     $self->touch_build_done_marker;
   }
-  
-  #### as we are building just a static library the following is not (perhaps) necessary
-  #if($^O eq 'darwin') {
-  #  my $sharedir     = eval {File::ShareDir::dist_dir('Alien-Box2D')} || '';
-  #  my $dlext        = 'so|dylib|bundle';
-  #  my ($libname)    = $self->find_file("$build_out/lib", qr/\.$dlext[\d\.]+$/);
-  #  if($self->invoked_action() eq 'test') {
-  #    my $cmd = "install_name_tool -id $libname $libname";
-  #    print "Changing lib id ...\n(cmd: $cmd)\n";
-  #    $self->do_system($cmd);
-  #  }
-  #  elsif($self->invoked_action() eq 'install') {
-  #    $libname         = $1 if $libname =~ /([^\\\/]+)$/;
-  #    my $cmd = "install_name_tool -id $sharedir/$share_subdir/lib/$libname sharedir/$share_subdir/lib/$libname";
-  #    print "Changing lib id ...\n(cmd: $cmd)\n";
-  #    $self->do_system($cmd);
-  #  }
-  #}
 
   $self->SUPER::ACTION_code;
 }
@@ -172,6 +154,9 @@ sub build_binaries {
   my $cxxflags = '-O3';
   $cxxflags .= ' -fPIC' if $Config{cccdlflags} =~ /-fPIC/;
   # MacOSX related flags
+  # XXX FIXME
+  # does not work well see
+  # http://www.cpantesters.org/cpan/report/3034ded6-8d49-11e0-961e-c9b51fb1acdd
   $cxxflags .= ' -arch x86_64' if $Config{ccflags} =~ /-arch x86_64/;
   $cxxflags .= ' -arch i386' if $Config{ccflags} =~ /-arch i386/;
   $cxxflags .= ' -arch ppc' if $Config{ccflags} =~ /-arch ppc/;
