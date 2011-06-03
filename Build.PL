@@ -8,7 +8,7 @@ use My::Builder;
 my $build = My::Builder->new(
   module_name          => 'Alien::Box2D',
   all_from             => 'lib/Alien/Box2D.pm',
-  dist_author	       => 'KMX <kmx@cpan.org>',
+  dist_author	       => 'FROGGS <froggs@cpan.org>',
   license              => 'perl',
   requires             => {
     'File::Spec'       => '0',
