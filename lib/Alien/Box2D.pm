@@ -22,18 +22,8 @@ $VERSION = eval $VERSION;
 
 =head1 SYNOPSIS
 
-Alien::Box2D during its installation does one of the following:
-
-=over
-
-=item * Builds I<Box2D> binaries from source codes and installs dev 
-files (headers: *.h, static library: *.a) into I<share>
-directory of Alien::Box2D distribution.
-
-=back
-
-Later you can use Alien::Box2D in your module that needs to link with I<libBox2D>
-like this:
+You can use Alien::Box2D in your module that needs to link with I<Box2D>
+library like this:
 
     # Sample Build.pl
     use Module::Build;
@@ -58,9 +48,10 @@ NOTE: Alien::Box2D is required only for building not for using 'Any::Box2D::Modu
 
 =head1 DESCRIPTION
 
-In short C<Alien::Box2D> can be used to detect and get configuration
-settings from an already installed Box2D. It offers also an option to
-download Box2D source codes and build binaries from scratch.
+Alien::Box2D during its installation downloads Box2D library source codes,
+builds I<Box2D> binaries from source codes and installs necessary dev files
+(headers: *.h, static library: *.a) into I<share> directory of Alien::Box2D
+distribution.
 
 =head1 METHODS
 
