@@ -182,7 +182,7 @@ sub build_binaries {
   if ($^O eq 'solaris' && system('ar -V') < 0) {    
     for (qw[/usr/ccs/bin /usr/xpg4/bin /usr/sfw/bin /usr/xpg6/bin /usr/gnu/bin /opt/gnu/bin /usr/bin]) {
       if (-x "$_/ar") {
-        $ar = "AR=$_/ar";
+        $ar = "$_/ar";
         last;
       }
     }
