@@ -166,8 +166,11 @@ sub build_binaries {
   ### workaround for http://www.cpantesters.org/cpan/report/16e1fb62-8bc3-11e0-a7f7-6524785ebe45
   #On solaris, some tools like 'ar' are not in the default PATH, but in /usr/???/bin
   my ($ar, $ranlib);
-  if ($^O eq 'solaris' && system('ar -V') < 0) {    
+  if ($^O eq 'solaris') {    
+    $ar     = 'ar'     if system('ar -V') >= 0;
+    $ranlib = 'ranlib' if system('ranlib -V') >= 0;
     for (qw[/usr/ccs/bin /usr/xpg4/bin /usr/sfw/bin /usr/xpg6/bin /usr/gnu/bin /opt/gnu/bin /usr/bin]) {
+      last if $ar && $ranlib;
       $ar = "$_/ar" if (!$ar && -x "$_/ar");
       $ranlib = "$_/ranlib" if (!$ranlib && -x "$_/ranlib");
     }
