@@ -165,13 +165,11 @@ sub build_binaries {
 
   ### workaround for http://www.cpantesters.org/cpan/report/16e1fb62-8bc3-11e0-a7f7-6524785ebe45
   #On solaris, some tools like 'ar' are not in the default PATH, but in /usr/???/bin
-  my $ar;
+  my ($ar, $ranlib);
   if ($^O eq 'solaris' && system('ar -V') < 0) {    
     for (qw[/usr/ccs/bin /usr/xpg4/bin /usr/sfw/bin /usr/xpg6/bin /usr/gnu/bin /opt/gnu/bin /usr/bin]) {
-      if (-x "$_/ar") {
-        $ar = "$_/ar";
-        last;
-      }
+      $ar = "$_/ar" if (!$ar && -x "$_/ar");
+      $ranlib = "$_/ranlib" if (!$ranlib && -x "$_/ranlib");
     }
   }
 
@@ -189,6 +187,7 @@ sub build_binaries {
   my @cmd = ($self->_get_make, '-f', $makefile, "PREFIX=$prefixdir", 'install');
   push @cmd, "CXXFLAGS=$cxxflags" if $cxxflags;
   push @cmd, "AR=$ar" if $ar;
+  push @cmd, "RANLIB=$ranlib" if $ranlib;
   #push @cmd, "CXX=g++"; ### the default in makefile.unix is 'c++' - here you can override it
   printf("(cmd: %s)\n", join(' ', @cmd));
   $self->do_system(@cmd) or die "###ERROR### [$?] during make ... ";
