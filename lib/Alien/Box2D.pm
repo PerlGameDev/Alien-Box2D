@@ -76,7 +76,7 @@ KMX, E<lt>kmx at cpan.orgE<gt>
 
 =head1 COPYRIGHT
 
-Please notice that the source code of tidyp library has a different license than module itself.
+Please notice that the source code of Box2D library has a different license than module itself.
 
 =head2 Alien::Box2D perl module
 
