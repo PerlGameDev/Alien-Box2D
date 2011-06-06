@@ -193,6 +193,7 @@ sub build_binaries {
   push @cmd, "RANLIB=$ranlib" if $ranlib;
   push @cmd, "CXX=$cxx" if $cxx;
   printf("(cmd: %s)\n", join(' ', @cmd));
+  $self->config_data('make_command', \@cmd);
   $self->do_system(@cmd) or die "###ERROR### [$?] during make ... ";
   chdir $self->base_dir();
   

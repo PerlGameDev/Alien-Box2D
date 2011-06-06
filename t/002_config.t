@@ -2,6 +2,7 @@
 
 use Test::More tests => 3;
 use Alien::Box2D;
+use Alien::Box2D::ConfigData;
 
 ### test some config strings
 like( Alien::Box2D->config('version'), qr/([0-9]+\.)*[0-9]+/, "Testing config('version')" );
@@ -15,3 +16,6 @@ diag( "VERSION=" . Alien::Box2D->config('version') );
 diag( "PREFIX=" . Alien::Box2D->config('prefix') );
 diag( "CFLAGS=" . Alien::Box2D->config('cflags') );
 diag( "LIBS=" . Alien::Box2D->config('libs') );
+
+my $m = join ' ', @{Alien::Box2D::ConfigData->config('make_command')};
+diag( "make_command=$m" );
