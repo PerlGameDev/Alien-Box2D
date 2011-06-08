@@ -27,6 +27,7 @@ my $build = My::Builder->new(
     'Module::Build'    => '0.36',
     'Text::Patch'      => '0',
     'ExtUtils::CppGuess' => '0',
+    'ExtUtils::Liblist'  => '0',
   },
   configure_requires   => {  #need to have for running: perl Build.PL
     'File::Spec'       => '0',

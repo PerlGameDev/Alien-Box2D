@@ -150,7 +150,9 @@ sub build_binaries {
   $self->config_data('build_prefix', $prefixdir); # save it for future Alien::Box2D::ConfigData
   
   # some platform specific stuff
-  my $makefile = $^O eq 'MSWin32' ? rel2abs('patches/Makefile.mingw') : rel2abs('patches/Makefile.unix'); 
+  my $makefile = rel2abs('patches/Makefile.unix'); 
+  $makefile = rel2abs('patches/Makefile.mingw') if $^O eq 'MSWin32' && $Config{cc} =~ /gcc/;
+  $makefile = rel2abs('patches/Makefile.nmake') if $^O eq 'MSWin32' && $Config{cc} =~ /cl/;
   my $cxxflags = '-O3';
   $cxxflags .= ' -fPIC' if $Config{cccdlflags} =~ /-fPIC/;
   # MacOSX related flags
