@@ -28,6 +28,7 @@ install: all
 	$(MKPATH) "$(PREFIX)/include/Box2D/Dynamics"
 	$(MKPATH) "$(PREFIX)/include/Box2D/Dynamics/Contacts"
 	$(MKPATH) "$(PREFIX)/include/Box2D/Dynamics/Joints"
+	$(MKPATH) "$(PREFIX)/include/Box2D/Rope"
 	$(CP) Box2D.h "$(PREFIX)/include/Box2D"
 	$(CP) Collision/*.h "$(PREFIX)/include/Box2D/Collision"
 	$(CP) Collision/Shapes/*.h "$(PREFIX)/include/Box2D/Collision/Shapes"
@@ -35,4 +36,5 @@ install: all
 	$(CP) Dynamics/*.h "$(PREFIX)/include/Box2D/Dynamics"
 	$(CP) Dynamics/Contacts/*.h "$(PREFIX)/include/Box2D/Dynamics/Contacts"
 	$(CP) Dynamics/Joints/*.h "$(PREFIX)/include/Box2D/Dynamics/Joints"
+	$(CP) Rope/*.h "$(PREFIX)/include/Box2D/Rope"
 	$(CP) $(STATIC_LIB) "$(PREFIX)/lib"
