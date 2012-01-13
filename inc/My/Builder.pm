@@ -27,7 +27,7 @@ sub ACTION_build {
 
 sub ACTION_install {
   my $self = shift;
-  my $sharedir = eval {File::ShareDir::dist_dir('Alien-Box2D')};  
+  my $sharedir = eval {File::ShareDir::dist_dir('Alien-Box2D')};
   $self->clean_dir($sharedir) if $sharedir; # remove previous versions
   return $self->SUPER::ACTION_install(@_);
 }
@@ -57,7 +57,7 @@ sub ACTION_code {
     $self->config_data('config', {}); # just to be sure
 
     $self->fetch_sources($download);
-    $self->extract_sources($download, $build_src);    
+    $self->extract_sources($download, $build_src);
     $self->clean_dir($build_out);
     $self->build_binaries($build_out, $build_src);
     $self->set_config_data($build_out);
@@ -131,7 +131,7 @@ sub set_config_data {
     cflags      => '-I' . $self->quote_literal('@PrEfIx@/include'),
     shared_libs => [ ],
   };
-  
+
   if($^O =~ /(bsd|linux)/) {
     $cfg->{libs} = '-L' . $self->quote_literal('@PrEfIx@/lib') . ' -Wl,-rpath,' . $self->quote_literal('@PrEfIx@/lib') . ' -lBox2D -lm',
   }
@@ -146,15 +146,15 @@ sub build_binaries {
 
   print "BUILDING '" . $bp->{dirname} . "'...\n";
   my $srcdir = catfile($build_src, $bp->{dirname});
-  my $prefixdir = rel2abs($build_out);  
+  my $prefixdir = rel2abs($build_out);
   $self->config_data('build_prefix', $prefixdir); # save it for future Alien::Box2D::ConfigData
-  
+
   # some platform specific stuff
-  my $makefile = rel2abs('patches/Makefile.unix'); 
+  my $makefile = rel2abs('patches/Makefile.unix');
   $makefile = rel2abs('patches/Makefile.mingw') if $^O eq 'MSWin32' && $Config{cc} =~ /gcc/;
   $makefile = rel2abs('patches/Makefile.nmake') if $^O eq 'MSWin32' && $Config{cc} =~ /cl/;
   my $cxxflags = '-O3';
-  $cxxflags .= ' -fPIC' if $Config{cccdlflags} =~ /-fPIC/;
+  $cxxflags   .= " $1" if $Config{cccdlflags} =~ /(-[fd]PIC)/i;
   # MacOSX related flags
   # 'as' for 'arch' can be in /usr/libexec/gcc/darwin/<arch_type>/as or in /usr/local/libexec/gcc/darwin/<arch_type>/as
   foreach my $arch (qw(x86_64 i386 ppc)) {
@@ -165,12 +165,12 @@ sub build_binaries {
     }
   }
 
-  my $cxx = $self->search_env_path(qw/c++ g++ gpp aCC CC cxx cc++ cl FCC KCC RCC xlC_r xlC/); #search PATH for c++ compiler  
+  my $cxx = $self->search_env_path(qw/c++ g++ gpp aCC CC cxx cc++ cl FCC KCC RCC xlC_r xlC/); #search PATH for c++ compiler
   my $ar = $self->search_env_path('ar');
   my $ranlib = $self->search_env_path('ranlib');
   ### workaround for http://www.cpantesters.org/cpan/report/16e1fb62-8bc3-11e0-a7f7-6524785ebe45
-  #On solaris, some tools like 'ar' are not in the default PATH, but in /usr/???/bin  
-  if ($^O eq 'solaris') {    
+  #On solaris, some tools like 'ar' are not in the default PATH, but in /usr/???/bin
+  if ($^O eq 'solaris') {
     for (qw[/usr/ccs/bin /usr/xpg4/bin /usr/sfw/bin /usr/xpg6/bin /usr/gnu/bin /opt/gnu/bin /usr/bin]) {
       last if $ar && $ranlib;
       $ar = "$_/ar" if (!$ar && -x "$_/ar");
@@ -186,8 +186,8 @@ sub build_binaries {
   if ($version =~ /version\s?=\s?\{(\d+)[^\d]+(\d+)[^\d]+(\d+)\}/) {
     print STDERR "Got version=$1.$2.$3\n";
     $self->notes('build_box2d_version', "$1.$2.$3");
-  } 
-   
+  }
+
   chdir $srcdir;
   my @cmd = ($self->_get_make, '-f', $makefile, "PREFIX=$prefixdir", 'install');
   push @cmd, "CXXFLAGS=$cxxflags" if $cxxflags;
@@ -198,7 +198,7 @@ sub build_binaries {
   $self->config_data('make_command', \@cmd);
   $self->do_system(@cmd) or die "###ERROR### [$?] during make ... ";
   chdir $self->base_dir();
-  
+
   return 1;
 }
 
@@ -253,7 +253,7 @@ sub quote_literal {
       $txt =~ s|"|\\"|g;
       return qq("$txt");
     }
-    return $txt;    
+    return $txt;
 }
 
 # pure perl implementation of patch functionality
@@ -297,9 +297,9 @@ sub apply_patch {
 
 sub _get_make {
   my ($self) = @_;
-  
+
   return $Config{make} if $^O =~ /^(cygwin|MSWin32)$/;
-  
+
   my @try = ($Config{gmake}, 'gmake', 'make', $Config{make});
   my %tested;
   print "Gonna detect GNU make:\n";
@@ -335,7 +335,7 @@ sub search_env_path {
     for my $dir (split /\Q$sep\E/,$ENV{PATH}) {
       return $exe if -x "$dir/$exe$ext";
     }
-  }  
+  }
 }
 
 1;
