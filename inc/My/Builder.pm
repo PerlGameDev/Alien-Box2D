@@ -154,7 +154,7 @@ sub build_binaries {
   $makefile = rel2abs('patches/Makefile.mingw') if $^O eq 'MSWin32' && $Config{cc} =~ /gcc/;
   $makefile = rel2abs('patches/Makefile.nmake') if $^O eq 'MSWin32' && $Config{cc} =~ /cl/;
   my $cxxflags = '-O3';
-  $cxxflags   .= " $1" if $Config{cccdlflags} =~ /((-DPIC\s+)?-fPIC)/i;
+  $cxxflags   .= " $1" if $Config{cccdlflags} =~ /((-[df]PIC\s+)?-[df]PIC)/i;
   # MacOSX related flags
   # 'as' for 'arch' can be in /usr/libexec/gcc/darwin/<arch_type>/as or in /usr/local/libexec/gcc/darwin/<arch_type>/as
   foreach my $arch (qw(x86_64 i386 ppc)) {

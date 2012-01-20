@@ -1,5 +1,8 @@
 Version history for Perl module Alien::Box2D
 
+0.105	20/01/2012
+	- another fix for -fpic (can be "-DPIC -fPIC") [FROGGS]
+
 0.104	13/01/2012
 	- fixed -fpic issue (can be -fPIC, -fpic, -DPIC, ...) [FROGGS]
 
